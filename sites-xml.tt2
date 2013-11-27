@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<pinger:topology 
+  xmlns:pinger="http://namespaces.slac.stanford.edu/schema/pinger/20071120"
+  xmlns:nmtl2="http://ogf.org/schema/network/topology/l2/20070707/" 
+  xmlns:nmtl3="http://ogf.org/schema/network/topology/l3/20070707/" 
+  xmlns:nmtl4="http://ogf.org/schema/network/topology/l4/20070707/" 
+  xmlns:nmtb="http://ogf.org/schema/network/topology/base/20070707/">
+  
+
+  [% FOREACH domain = domains %]
+  <nmtb:domain id="urn:ogf:network:domain=[% domain.name %]">
+    [% FOREACH node = domain.nodes %]
+    <nmtb:node id="urn:ogf:network:domain=[% node.domain %]:node=[% node.id %]">
+      <nmtb:name type="string">[% node.name %]</nmtb:name>
+      <nmtb:hostName>[% node.hostName %]</nmtb:hostName>
+      <nmtb:description>[% node.description %]</nmtb:description>
+
+      [% FOREACH serviceInterface = node.serviceInterface %]
+      <pinger:serviceInterface type="[% serviceInterface.type %]">
+        [% IF serviceInterface.planetLabScript %]<pinger:planetLabScript>[% serviceInterface.planetLabScript %]</pinger:planetLabScript>[% END %]
+        [% IF serviceInterface.pingURL %]<pinger:pingURL>[% serviceInterface.pingURL %]</pinger:pingURL>[% END %]
+       
+        [% IF serviceInterface.tracerouteURL %]<pinger:tracerouteURL>[% serviceInterface.tracerouteURL %]</pinger:tracerouteURL>[% END %]
+      </pinger:serviceInterface>
+      [% END %]
+
+      [% IF node.tulipTier != '' and node.tulipTier >= 0  %]<pinger:tulipTier>[% node.tulipTier %]</pinger:tulipTier>[% END %]
+      [% IF node.tulipScalingFactor %]<pinger:tulipScalingFactor>[% node.tulipScalingFactor %]</pinger:tulipScalingFactor>[% END %]
+
+      [% IF node.comments %]<nmtb:comments>[% node.comments %]</nmtb:comments>[% END %]
+
+
+     [% FOREACH contact = node.contact %]
+      <nmtb:contact priority="[% contact.priority %]">
+        [% IF contact.administrator %]<nmtb:administrator>[% contact.administrator %]</nmtb:administrator>[% END %]
+        [% IF contact.email %]<nmtb:email>[% contact.email %]</nmtb:email>[% END %]
+        [% IF contact.phoneNumber %]<nmtb:phoneNumber>[% contact.phoneNumber %]</nmtb:phoneNumber>[% END %]
+        [% IF contact.institution %]<nmtb:institution>[% contact.institution %]</nmtb:institution>[% END %]
+      </nmtb:contact>
+     [% END %]
+      <nmtb:location>
+        [% IF node.location.institution %]<nmtb:institution>[% node.location.institution %]</nmtb:institution>[% END %]
+        [% IF node.location.continent %]<nmtb:continent>[% node.location.continent %]</nmtb:continent>[% END %]
+        [% IF node.location.zipcode %]<nmtb:zipcode>[% node.location.zipcode %]</nmtb:zipcode>[% END %]
+        [% IF node.location.state %]<nmtb:state>[% node.location.state %]</nmtb:state>[% END %]
+        [% IF node.location.country %]<nmtb:country>[% node.location.country %]</nmtb:country> [% END %]
+        [% IF node.location.city %]<nmtb:city>[% node.location.city %]</nmtb:city>[% END %]
+        [% IF node.location.streetAddress %]<nmtb:streetAddress>[% node.location.streetAddress %]</nmtb:streetAddress>[% END %] 
+        [% IF node.location.longitude  %]<nmtb:longitude>[% node.location.longitude %]</nmtb:longitude>[% END %]
+        [% IF node.location.latitude %]<nmtb:latitude>[% node.location.latitude %]</nmtb:latitude>[% END %]
+        [% IF node.location.floor %]<nmtb:floor>[% node.location.floor %]</nmtb:floor>[% END %]
+        [% IF node.location.room %]<nmtb:room>[% node.location.room %]</nmtb:room>[% END %]
+        [% IF node.location.cage %]<nmtb:cage>[% node.location.cage %]</nmtb:cage>[% END %]
+        [% IF node.location.rack %]<nmtb:rack>[% node.location.rack %]</nmtb:rack>[% END %]
+        [% IF node.location.shelf %]<nmtb:shelf>[% node.location.shelf %]</nmtb:shelf>[% END %]
+      </nmtb:location>
+      
+     [% FOREACH port = node.port %]
+      <nmtl3:port id="urn:ogf:network:domain=[% node.domain %]:node=[% node.id %]:port=[% node.port.ipAddress %]">
+        <nmtl3:ipAddress type="IPv4">[% node.port.ipAddress %]</nmtl3:ipAddress>
+      </nmtl3:port>
+      [% END %]
+      
+    </nmtb:node>
+  [% END %]
+  </nmtb:domain>
+  [% END %]
+
+</pinger:topology>
